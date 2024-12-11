@@ -1,0 +1,35 @@
+# Example preload file containing commands from the blog post
+# python initiator.py ./config/initiator.cfg --colour --preload preload.blog.txt
+message new ORD-BUY
+message load FILE ./messages/fix_capture.pcapng YES_ALL
+message list
+message use FIX.4.2:NEW_ORDER_D-D:1
+message edit 40=1 54=1 55=THQI 38=500 -44
+message view
+message send
+history
+message edit 40=1 54=2 55=THQI 38=250 +13:44=70.00 59=1
+message view
+message send
+message new ORD-CANCEL
+history list 2
+message new ORD-CANCEL 4
+message view
+message send
+history list 2
+history view -1 filter 'OrdStatus|Symbol|qty|AvgPx'
+message use FIX.4.2:NEW_ORDER_D-D:1
+message edit 55=THQI 54=1 38=500 44=-64
+message view
+message send
+message fuzz 55
+message edit 49=TEST
+message view
+message send
+message send raw
+wait 5
+message edit 49=SOMECLIENT 52=invalid
+message view
+message send raw -UT
+wait 2
+exit
